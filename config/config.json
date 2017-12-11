@@ -1,0 +1,10 @@
+{
+  "port": "3333",
+  "dbPort": "5432",
+  "dbName": "civimech",
+  "dbServer": "localhost",
+  "dbUserName": "postgres",
+  "dbPassword": "C0mplexPwd",
+  "seedDataPath": "./seed/seed.json",
+  "originAllowed": "*"
+}
