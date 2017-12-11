@@ -2,10 +2,10 @@ package log
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
-	"time"
 )
 
 type Logger interface {

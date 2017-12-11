@@ -4,7 +4,6 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
-	//"github.com/vikashvverma/techscanservice/handler"
 	"github.com/vikashvverma/manpowersupply-backend/healthcheck"
 	"github.com/vikashvverma/manpowersupply-backend/factory"
 )
