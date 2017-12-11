@@ -9,6 +9,8 @@ import (
 	_ "github.com/lib/pq" //PostgreSQL driver
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
+	"github.com/vikashvverma/manpowersupply-backend/repository"
+	"github.com/vikashvverma/manpowersupply-backend/party"
 )
 
 type Factory struct {
@@ -37,9 +39,9 @@ func (f *Factory) Logger() *logrus.Logger {
 //	return seed.New(repository.New(f.conn), f.config.SeedDataPath())
 //}
 
-//func (f *Factory) Fetcher() github.Fetcher {
-//	return github.New(repository.New(f.conn))
-//}
+func (f *Factory) Fetcher() party.Fetcher {
+	return party.New(repository.New(f.conn))
+}
 
 func newDatabase(driverName, connectionString string) (*sql.DB, error) {
 	sqlDB, err := sql.Open(driverName, connectionString)
