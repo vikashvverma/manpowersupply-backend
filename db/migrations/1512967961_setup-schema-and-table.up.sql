@@ -6,7 +6,7 @@ CREATE TABLE manpower.party (
 	address VARCHAR(100) NOT NULL,
 	phone varchar(15) NOT NULL,
 	mobile varchar(15) NOT NULL,
-	email varchar(20) NOT NULL
+	email varchar(40) NOT NULL
 );
 
 
