@@ -1,2 +1,7 @@
 package: github.com/vikashvverma/manpowersupply-backend
-import: []
+import:
+- package: github.com/lib/pq
+- package: github.com/Sirupsen/logrus
+  version: ^1.0.4
+- package: github.com/gorilla/mux
+  version: ^1.6.0
