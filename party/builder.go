@@ -7,8 +7,19 @@ import (
 	"github.com/vikashvverma/manpowersupply-backend/repository"
 )
 
-func findAll(e repository.Execer) ([]Party, error) {
-	query := "SELECT id, name, address, phone, mobile, email FROM manpower.party ORDER BY id"
+const(
+	schema = "manpower"
+	table = "party"
+	partyPerPage = 10
+)
+
+func save(e repository.Execer ,p *Party) (int64, error){
+	query:=fmt.Sprintf("INSERT INTO %s.%s(name, address, phone, mobile, email) VALUES($1, $2, $3, $4, $5)", schema, table)
+	return e.Exec(query, p.Name, p.Address, p.Phone, p.Mobile, p.Email)
+}
+
+func findAll(e repository.Execer, page int64) ([]Party, error) {
+	query := fmt.Sprintf("SELECT id, name, address, phone, mobile, email FROM %s.%s ORDER BY id DESC OFFSET %d LIMIT %d", schema, table, page * partyPerPage, partyPerPage)
 
 	res, err := e.Query(query, partyScanner)
 	if err != nil {
