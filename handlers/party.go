@@ -39,11 +39,15 @@ func validateParty(p *party.Party) bool {
 func FindParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
+		partyID := vars["id"]
+
+		queryParams:=r.URL.Query()
+
 		page := 0
 		var err error
-		pageString, ok := vars["page"]
-		if ok {
-			page, err = strconv.Atoi(pageString)
+		pageString := queryParams["page"]
+		if len(partyID) == 0  && len(pageString) > 0{
+			page, err = strconv.Atoi(pageString[0])
 			if err != nil {
 				response.ServerError(w)
 				return
@@ -54,7 +58,7 @@ func FindParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 			}
 		}
 
-		parties, err := f.Fetch(int64(page))
+		parties, err := f.Fetch(partyID, int64(page))
 		if err != nil {
 			l.WithError(err).Errorf("findParty: could not fetch parties")
 			response.ServerError(w)

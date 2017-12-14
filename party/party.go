@@ -7,7 +7,7 @@ import (
 )
 
 type Fetcher interface {
-	Fetch(int64) ([]Party, error)
+	Fetch(string, int64) ([]Party, error)
 	Save(*Party) error
 }
 
@@ -19,8 +19,8 @@ func New(e repository.Execer) Fetcher {
 	return &party{Execer: e}
 }
 
-func (p *party) Fetch(page int64) ([]Party, error) {
-	return findAll(p.Execer, page)
+func (p *party) Fetch(id string, page int64) ([]Party, error) {
+	return findAll(p.Execer, id, page)
 }
 
 func (p *party) Save(party *Party) error {
