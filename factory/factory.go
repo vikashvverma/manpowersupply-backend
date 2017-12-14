@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq" //PostgreSQL driver
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
+	"github.com/vikashvverma/manpowersupply-backend/job"
 	"github.com/vikashvverma/manpowersupply-backend/party"
 	"github.com/vikashvverma/manpowersupply-backend/repository"
 )
@@ -39,7 +40,11 @@ func (f *Factory) Logger() *logrus.Logger {
 //	return seed.New(repository.New(f.conn), f.config.SeedDataPath())
 //}
 
-func (f *Factory) Fetcher() party.Fetcher {
+func (f *Factory) JobFetcher() job.Fetcher {
+	return job.New(repository.New(f.conn))
+}
+
+func (f *Factory) PartyFetcher() party.Fetcher {
 	return party.New(repository.New(f.conn))
 }
 

@@ -41,12 +41,12 @@ func FindParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 		vars := mux.Vars(r)
 		partyID := vars["id"]
 
-		queryParams:=r.URL.Query()
+		queryParams := r.URL.Query()
 
 		page := 0
 		var err error
 		pageString := queryParams["page"]
-		if len(partyID) == 0  && len(pageString) > 0{
+		if len(partyID) == 0 && len(pageString) > 0 {
 			page, err = strconv.Atoi(pageString[0])
 			if err != nil {
 				response.ServerError(w)

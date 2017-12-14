@@ -17,12 +17,13 @@ const (
 func Router(c *config.Config, f *factory.Factory) *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/healthcheck", healthcheck.Self).Methods(GET)
-	router.HandleFunc("/api/manpower/party", handlers.SaveParty(f.Fetcher(), f.Logger())).Methods(POST)
-	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.Fetcher(), f.Logger())).Methods(GET)
-	router.HandleFunc("/api/manpower/party/{id}", handlers.FindParty(f.Fetcher(), f.Logger())).Methods(GET)
-	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.Fetcher(), f.Logger())).Queries("page","{page}").Methods(GET)
-	//router.HandleFunc("/api/techscan/{lang}", handler.Language(f.Fetcher(), f.Logger())).Methods(GET)
-	//router.HandleFunc("/api/techscan/{lang}/{page}", handler.Language(f.Fetcher(), f.Logger())).Methods(GET)
-	//router.HandleFunc("/api/owner/{repoID}", handler.Owner(f.Fetcher(), f.Logger())).Methods(GET)
+	router.HandleFunc("/api/manpower/party", handlers.SaveParty(f.PartyFetcher(), f.Logger())).Methods(POST)
+	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.PartyFetcher(), f.Logger())).Methods(GET)
+	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.PartyFetcher(), f.Logger())).Queries("page", "{page}").Methods(GET)
+	router.HandleFunc("/api/manpower/party/{id}", handlers.FindParty(f.PartyFetcher(), f.Logger())).Methods(GET)
+	//router.HandleFunc("/api/manpower/party", handlers.SaveParty(f.PartyFetcher(), f.Logger())).Methods(POST)
+	router.HandleFunc("/api/manpower/job", handlers.FindJob(f.JobFetcher(), f.Logger())).Methods(GET)
+	router.HandleFunc("/api/manpower/job", handlers.FindJob(f.JobFetcher(), f.Logger())).Queries("page", "{page}", "limit", "{limit}").Methods(GET)
+	router.HandleFunc("/api/manpower/job/{id}", handlers.FindJob(f.JobFetcher(), f.Logger())).Methods(GET)
 	return router
 }
