@@ -1,17 +1,20 @@
 package party
 
-type Party  struct{
-	ID string `json:"id"`
-	Name string `json:"name"`
+import "time"
+
+type Party struct {
+	ID      int64  `json:"id"`
+	Name    string `json:"name"`
 	Address string `json:"address"`
-	Phone string `json:"phone"`
-	Mobile string `json:"mobile"`
-	Email string `json:"email"`
+	Phone   string `json:"phone"`
+	Mobile  string `json:"mobile"`
+	Email   string `json:"email"`
+	Query   Query  `json:"query"`
 }
 
 type Query struct {
-	ID string `json:"id"`
-	QueryerID string `json:"queryer_id"`
-	Query string `json:"query"`
-	QueryDate string `json:"query_date"`
+	ID        int64     `json:"id"`
+	QueryerID int64     `json:"queryer_id"`
+	Query     string    `json:"query"`
+	QueryDate time.Time `json:"query_date"`
 }

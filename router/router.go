@@ -4,9 +4,9 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
-	"github.com/vikashvverma/manpowersupply-backend/healthcheck"
 	"github.com/vikashvverma/manpowersupply-backend/factory"
 	"github.com/vikashvverma/manpowersupply-backend/handlers"
+	"github.com/vikashvverma/manpowersupply-backend/healthcheck"
 )
 
 const (

@@ -13,8 +13,8 @@ import (
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
 	"github.com/vikashvverma/manpowersupply-backend/factory"
-	"github.com/vikashvverma/manpowersupply-backend/router"
 	"github.com/vikashvverma/manpowersupply-backend/log"
+	"github.com/vikashvverma/manpowersupply-backend/router"
 )
 
 const (

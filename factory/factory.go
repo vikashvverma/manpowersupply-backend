@@ -9,8 +9,8 @@ import (
 	_ "github.com/lib/pq" //PostgreSQL driver
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
-	"github.com/vikashvverma/manpowersupply-backend/repository"
 	"github.com/vikashvverma/manpowersupply-backend/party"
+	"github.com/vikashvverma/manpowersupply-backend/repository"
 )
 
 type Factory struct {
