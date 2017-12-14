@@ -19,7 +19,7 @@ func New() Logger {
 	return &requestResponseLogger{}
 }
 
-func (rrl *requestResponseLogger)  ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc){
+func (rrl *requestResponseLogger) ServeHTTP(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	start := time.Now()
 
 	reqFields := requestFields(r)

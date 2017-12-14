@@ -7,19 +7,25 @@ import (
 	"github.com/vikashvverma/manpowersupply-backend/repository"
 )
 
-const(
-	schema = "manpower"
-	table = "party"
+const (
+	schema       = "manpower"
+	partyTable   = "party"
+	query        = "query"
 	partyPerPage = 10
 )
 
-func save(e repository.Execer ,p *Party) (int64, error){
-	query:=fmt.Sprintf("INSERT INTO %s.%s(name, address, phone, mobile, email) VALUES($1, $2, $3, $4, $5)", schema, table)
-	return e.Exec(query, p.Name, p.Address, p.Phone, p.Mobile, p.Email)
+func saveQuery(e repository.Execer, q *Query) (int64, error) {
+	query := fmt.Sprintf("INSERT INTO %s.%s(queryer_id, query) VALUES($1, $2)", schema, query)
+	return e.Exec(query, q.QueryerID, q.Query)
+}
+
+func saveParty(e repository.Execer, p *Party) (int64, error) {
+	query := fmt.Sprintf("INSERT INTO %s.%s(name, address, phone, mobile, email) VALUES($1, $2, $3, $4, $5) RETURNING id", schema, partyTable)
+	return e.QueryRow(query, p.Name, p.Address, p.Phone, p.Mobile, p.Email)
 }
 
 func findAll(e repository.Execer, page int64) ([]Party, error) {
-	query := fmt.Sprintf("SELECT id, name, address, phone, mobile, email FROM %s.%s ORDER BY id DESC OFFSET %d LIMIT %d", schema, table, page * partyPerPage, partyPerPage)
+	query := fmt.Sprintf("SELECT a.id, a.name, a.address, a.phone, a.mobile, a.email, b.queryer_id, b.query, b.query_date FROM %s.%s a INNER JOIN %s.%s b ON a.id = b.queryer_id ORDER BY id DESC OFFSET %d LIMIT %d", schema, partyTable, schema, query, page*partyPerPage, partyPerPage)
 
 	res, err := e.Query(query, partyScanner)
 	if err != nil {
@@ -43,6 +49,9 @@ func partyScanner(rows *sql.Rows) (interface{}, error) {
 			&result.Phone,
 			&result.Mobile,
 			&result.Email,
+			&result.Query.QueryerID,
+			&result.Query.Query,
+			&result.Query.QueryDate,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("partyScanner: error scanning row: %s", err)

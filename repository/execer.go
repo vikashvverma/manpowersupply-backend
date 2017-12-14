@@ -10,6 +10,7 @@ const unknownID = -1
 type Execer interface {
 	Exec(query string, args ...interface{}) (rowsAffected int64, err error)
 	Query(query string, scanner func(rows *sql.Rows) (interface{}, error), args ...interface{}) (interface{}, error)
+	QueryRow(query string, args ...interface{}) (int64, error)
 }
 
 type DB struct {
@@ -40,4 +41,14 @@ func (db *DB) Query(query string, scanner func(rows *sql.Rows) (interface{}, err
 	}
 
 	return scanner(rows)
+}
+
+func (db *DB) QueryRow(query string, args ...interface{}) (int64, error) {
+	row := db.conn.QueryRow(query, args...)
+	var lastInsertID int64
+	err := row.Scan(&lastInsertID)
+	if err != nil {
+		return unknownID, fmt.Errorf("QueryRow: could not query: %s", err)
+	}
+	return lastInsertID, nil
 }

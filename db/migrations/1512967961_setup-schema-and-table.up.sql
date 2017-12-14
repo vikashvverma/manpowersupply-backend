@@ -14,8 +14,8 @@ CREATE TABLE manpower.party (
 CREATE TABLE manpower.query (
 	id SERIAL,
 	queryer_id INT NOT NULL,
-	query varchar(150) NOT NULL,
-	query_date timestamptz  NOT NULL,
+	query varchar(400) NOT NULL,
+	query_date timestamptz  NOT NULL DEFAULT now(),
 	PRIMARY KEY (id)
 );
 

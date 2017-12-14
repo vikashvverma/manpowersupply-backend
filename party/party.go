@@ -24,9 +24,15 @@ func (p *party) Fetch(page int64) ([]Party, error) {
 }
 
 func (p *party) Save(party *Party) error {
-	_, err := save(p.Execer, party)
-	if err !=nil{
-		return fmt.Errorf("save: could not save party: %s", err)
+	lastInsertID, err := saveParty(p.Execer, party)
+	if err != nil {
+		return fmt.Errorf("saveParty: could not party: %s", err)
+	}
+	fmt.Println("lastInsertID: ", lastInsertID)
+	party.Query.QueryerID = lastInsertID
+	_, err = saveQuery(p.Execer, &party.Query)
+	if err != nil {
+		return fmt.Errorf("saveParty: could not query: %s", err)
 	}
 	return nil
 }
