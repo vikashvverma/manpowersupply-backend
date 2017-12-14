@@ -28,7 +28,7 @@ func (p *party) Save(party *Party) error {
 	if err != nil {
 		return fmt.Errorf("saveParty: could not party: %s", err)
 	}
-	fmt.Println("lastInsertID: ", lastInsertID)
+
 	party.Query.QueryerID = lastInsertID
 	_, err = saveQuery(p.Execer, &party.Query)
 	if err != nil {
