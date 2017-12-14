@@ -24,9 +24,12 @@ func saveParty(e repository.Execer, p *Party) (int64, error) {
 	return e.QueryRow(query, p.Name, p.Address, p.Phone, p.Mobile, p.Email)
 }
 
-func findAll(e repository.Execer, page int64) ([]Party, error) {
-	query := fmt.Sprintf("SELECT a.id, a.name, a.address, a.phone, a.mobile, a.email, b.queryer_id, b.query, b.query_date FROM %s.%s a INNER JOIN %s.%s b ON a.id = b.queryer_id ORDER BY id DESC OFFSET %d LIMIT %d", schema, partyTable, schema, query, page*partyPerPage, partyPerPage)
-
+func findAll(e repository.Execer, id string, page int64) ([]Party, error) {
+	query := fmt.Sprintf(`SELECT a.id, a.name, a.address, a.phone, a.mobile, a.email,
+				b.queryer_id, b.query, b.query_date FROM %s.%s a INNER JOIN %s.%s b
+				ON a.id = b.queryer_id WHERE a.id::TEXT LIKE '%s' ORDER BY id DESC
+				OFFSET %d LIMIT %d`,
+				schema, partyTable, schema, query, id+"%", page*partyPerPage, partyPerPage)
 	res, err := e.Query(query, partyScanner)
 	if err != nil {
 		return nil, fmt.Errorf("findAll: error querying database: %s", err)
