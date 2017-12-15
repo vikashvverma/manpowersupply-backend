@@ -103,6 +103,18 @@ func DeleteJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	}
 }
 
+func Types(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		jobTypes, err := f.Types()
+		if err != nil {
+			l.WithError(err).Errorf("Types: could not retrieve job types")
+			response.ServerError(w)
+			return
+		}
+		response.Success{Success: jobTypes}.Send(w)
+	}
+}
+
 func validateJob(j *job.Job) bool {
 	if j.JobID <= 0 || len(j.Location) == 0 || len(j.Industry) == 0 || len(j.Title) == 0 || j.TypeID == 0 {
 		return true

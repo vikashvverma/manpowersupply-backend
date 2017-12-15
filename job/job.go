@@ -12,6 +12,7 @@ type Fetcher interface {
 	Fetch(string, int64, int64) ([]Job, error)
 	SaveAndUpdate(*Job) (int64, error)
 	Delete(int64) error
+	Types() ([]Type, error)
 }
 
 type job struct {
@@ -36,4 +37,8 @@ func (j *job) SaveAndUpdate(job *Job) (int64, error) {
 
 func (j *job) Delete(jobID int64) error {
 	return delete(j.Execer, jobID)
+}
+
+func (j *job) Types() ([]Type, error) {
+	return jobTypes(j.Execer)
 }

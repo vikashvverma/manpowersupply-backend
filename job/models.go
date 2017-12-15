@@ -13,7 +13,7 @@ type Job struct {
 }
 
 type Type struct {
-	ID       int64  `json:"id"`
+	ID       int64  `json:"id, omitempty"`
 	TypeID   int64  `json:"type_id"`
 	Industry string `json:"industry"`
 }

@@ -11,6 +11,7 @@ import (
 const (
 	schema   = "manpower"
 	jobTable = "job"
+	jobType  = "job_type"
 )
 
 func upsert(e repository.Execer, j *Job) (int64, error) {
@@ -45,6 +46,32 @@ func findAll(e repository.Execer, id string, page, limit int64) ([]Job, error) {
 	}
 	jobs := res.([]Job)
 	return jobs, nil
+}
+
+func jobTypes(e repository.Execer) ([]Type, error) {
+	query := fmt.Sprintf("SELECT type_id, industry FROM %s.%s", schema, jobType)
+
+	types, err := e.Query(query, typeScanner)
+	if err != nil {
+		return nil, fmt.Errorf("jobTypes: could not query job types: %s", err)
+	}
+	return types.([]Type), nil
+}
+
+func typeScanner(rows *sql.Rows) (interface{}, error) {
+	var results []Type
+	defer rows.Close()
+
+	for rows.Next() {
+		var result Type
+
+		err := rows.Scan(&result.TypeID, &result.Industry)
+		if err != nil {
+			return nil, fmt.Errorf("typeScanner: error scanning row: %s", err)
+		}
+		results = append(results, result)
+	}
+	return results, nil
 }
 
 func jobScanner(rows *sql.Rows) (interface{}, error) {

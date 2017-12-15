@@ -27,6 +27,7 @@ func Router(c *config.Config, f *factory.Factory) *mux.Router {
 	router.HandleFunc("/api/manpower/job", handlers.FindJob(f.JobFetcher(), f.Logger())).Methods(GET)
 	router.HandleFunc("/api/manpower/job", handlers.FindJob(f.JobFetcher(), f.Logger())).Queries("page", "{page}", "limit", "{limit}").Methods(GET)
 	router.HandleFunc("/api/manpower/job/{id}", handlers.FindJob(f.JobFetcher(), f.Logger())).Methods(GET)
+	router.HandleFunc("/api/manpower/job/types/", handlers.Types(f.JobFetcher(), f.Logger())).Methods(GET)
 	router.HandleFunc("/api/manpower/party", handlers.SaveParty(f.PartyFetcher(), f.Logger())).Methods(POST)
 	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.PartyFetcher(), f.Logger())).Methods(GET)
 	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.PartyFetcher(), f.Logger())).Queries("page", "{page}").Methods(GET)
