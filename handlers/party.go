@@ -30,23 +30,25 @@ func SaveParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 		response.Success{Success: "saved successfully!"}.Send(w)
 	}
 }
+
 func validateParty(p *party.Party) bool {
 	if len(p.Name) == 0 || len(p.Mobile) < 10 {
 		return true
 	}
 	return false
 }
+
 func FindParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		partyID := vars["id"]
 
-		queryParams:=r.URL.Query()
+		queryParams := r.URL.Query()
 
 		page := 0
 		var err error
 		pageString := queryParams["page"]
-		if len(partyID) == 0  && len(pageString) > 0{
+		if len(partyID) == 0 && len(pageString) > 0 {
 			page, err = strconv.Atoi(pageString[0])
 			if err != nil {
 				response.ServerError(w)
