@@ -32,8 +32,8 @@ CREATE TABLE manpower.job (
 	title varchar(10) NOT NULL,
 	industry varchar(10) NOT NULL,
 	location varchar(10) NOT NULL,
-	date_created timestamptz NOT NULL,
-	date_updated timestamptz NOT NULL,
+	date_created timestamptz NOT NULL DEFAULT now(),
+	date_updated timestamptz NOT NULL DEFAULT now(),
 	available BOOLEAN NOT NULL,
 	type_id INT NOT NULL,
 	PRIMARY KEY (id)
