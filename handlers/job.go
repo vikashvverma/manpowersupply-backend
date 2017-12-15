@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -10,6 +12,32 @@ import (
 	"github.com/vikashvverma/manpowersupply-backend/job"
 	"github.com/vikashvverma/manpowersupply-backend/response"
 )
+
+func Upsert(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var j job.Job
+		json.NewDecoder(r.Body).Decode(&j)
+		if validateJob(&j) {
+			response.ClientError(w)
+			return
+		}
+
+		rowsAffected, err := f.SaveAndUpdate(&j)
+		if err != nil {
+			l.WithError(err).Errorf("upsert: could not save/update job")
+			response.ServerError(w)
+			return
+		}
+		response.Success{Success: fmt.Sprintf("%d row saved successfully!", rowsAffected)}.Send(w)
+	}
+}
+
+func validateJob(j *job.Job) bool {
+	if j.JobID <= 0 || len(j.Location) == 0 || len(j.Industry) == 0 || len(j.Title) == 0 || j.TypeID == 0 {
+		return true
+	}
+	return false
+}
 
 func FindJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
