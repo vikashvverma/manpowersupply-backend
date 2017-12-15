@@ -11,7 +11,7 @@ const unknownID = -1
 type Fetcher interface {
 	Fetch(string, int64, int64) ([]Job, error)
 	SaveAndUpdate(*Job) (int64, error)
-	Delete(*Job) error
+	Delete(int64) error
 }
 
 type job struct {
@@ -34,6 +34,6 @@ func (j *job) SaveAndUpdate(job *Job) (int64, error) {
 	return rowsAffected, err
 }
 
-func (j *job) Delete(job *Job) error {
-	return nil
+func (j *job) Delete(jobID int64) error {
+	return delete(j.Execer, jobID)
 }

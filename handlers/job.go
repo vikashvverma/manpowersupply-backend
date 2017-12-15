@@ -32,13 +32,6 @@ func Upsert(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	}
 }
 
-func validateJob(j *job.Job) bool {
-	if j.JobID <= 0 || len(j.Location) == 0 || len(j.Industry) == 0 || len(j.Title) == 0 || j.TypeID == 0 {
-		return true
-	}
-	return false
-}
-
 func FindJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
@@ -83,4 +76,36 @@ func FindJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 		}
 		response.Success{Success: jobs}.Send(w)
 	}
+}
+
+func DeleteJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+
+		jobIDString, ok := vars["jobID"]
+		var jobID int
+		var err error
+		if ok {
+			jobID, err = strconv.Atoi(jobIDString)
+			if err != nil {
+				l.WithError(err).Errorf("DeleteJob: invalid jobID supplied: %s", jobIDString)
+				response.ClientError(w)
+				return
+			}
+		}
+		err = f.Delete(int64(jobID))
+		if err != nil {
+			l.WithError(err).Errorf("Delete: could not delete job: %d", jobID)
+			response.ServerError(w)
+			return
+		}
+		response.Success{Success: fmt.Sprintf("Job having jobID: %d delete successfully", jobID)}.Send(w)
+	}
+}
+
+func validateJob(j *job.Job) bool {
+	if j.JobID <= 0 || len(j.Location) == 0 || len(j.Industry) == 0 || len(j.Title) == 0 || j.TypeID == 0 {
+		return true
+	}
+	return false
 }

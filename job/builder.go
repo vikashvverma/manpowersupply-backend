@@ -2,8 +2,8 @@ package job
 
 import (
 	"database/sql"
-	"time"
 	"fmt"
+	"time"
 
 	"github.com/vikashvverma/manpowersupply-backend/repository"
 )
@@ -22,10 +22,10 @@ func upsert(e repository.Execer, j *Job) (int64, error) {
 	return e.Exec(query, j.JobID, j.Title, j.Industry, j.Location, time.Now(), j.Available, j.TypeID)
 }
 
-func delete(e repository.Execer, jobID int64) error{
-	query:=fmt.Sprintf("DELETE FROM %s.%s WHERE job_id = $1", schema, jobTable)
-	_, err:=e.Exec(query, jobID)
-	if err!=nil{
+func delete(e repository.Execer, jobID int64) error {
+	query := fmt.Sprintf("DELETE FROM %s.%s WHERE job_id = $1", schema, jobTable)
+	_, err := e.Exec(query, jobID)
+	if err != nil {
 		return fmt.Errorf("delete: could not delete job having id: %d, err: ", jobID, err)
 	}
 	return nil

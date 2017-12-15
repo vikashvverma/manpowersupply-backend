@@ -30,12 +30,14 @@ func SaveParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 		response.Success{Success: "saved successfully!"}.Send(w)
 	}
 }
+
 func validateParty(p *party.Party) bool {
 	if len(p.Name) == 0 || len(p.Mobile) < 10 {
 		return true
 	}
 	return false
 }
+
 func FindParty(f party.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
