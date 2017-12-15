@@ -9,7 +9,7 @@ import (
 const unknownID = -1
 
 type Fetcher interface {
-	Fetch(string, int64, int64) ([]Job, error)
+	Fetch(string, int64, int64, string) ([]Job, error)
 	SaveAndUpdate(*Job) (int64, error)
 	Delete(int64) error
 	Types() ([]Type, error)
@@ -23,8 +23,8 @@ func New(e repository.Execer) Fetcher {
 	return &job{Execer: e}
 }
 
-func (j *job) Fetch(jobID string, page, limit int64) ([]Job, error) {
-	return findAll(j.Execer, jobID, page, limit)
+func (j *job) Fetch(jobID string, page, limit int64, jobType string) ([]Job, error) {
+	return findAll(j.Execer, jobID, page, limit, jobType)
 }
 
 func (j *job) SaveAndUpdate(job *Job) (int64, error) {

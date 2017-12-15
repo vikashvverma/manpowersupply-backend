@@ -40,10 +40,8 @@ func FindJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 		queryParams := r.URL.Query()
 
 		page := 0
-		limit := 10
 		var err error
 		pageString := queryParams["page"]
-		limitString := queryParams["limit"]
 		if len(jobID) == 0 && len(pageString) > 0 {
 			page, err = strconv.Atoi(pageString[0])
 			if err != nil {
@@ -56,6 +54,8 @@ func FindJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 			}
 		}
 
+		limit := 10
+		limitString := queryParams["limit"]
 		if len(jobID) == 0 && len(limitString) > 0 {
 			limit, err = strconv.Atoi(limitString[0])
 			if err != nil {
@@ -67,8 +67,13 @@ func FindJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 				return
 			}
 		}
+		jobType := ""
+		jobTypeString := queryParams["type"]
+		if len(jobID) == 0 && len(jobTypeString) > 0 {
+			jobType = jobTypeString[0]
+		}
 
-		jobs, err := f.Fetch(jobID, int64(page), int64(limit))
+		jobs, err := f.Fetch(jobID, int64(page), int64(limit), jobType)
 		if err != nil {
 			l.WithError(err).Errorf("findJob: could not fetch jobs")
 			response.ServerError(w)
