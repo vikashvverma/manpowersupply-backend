@@ -99,7 +99,7 @@ func DeleteJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 			response.ServerError(w)
 			return
 		}
-		response.Success{Success: fmt.Sprintf("Job having jobID: %d delete successfully", jobID)}.Send(w)
+		response.Success{Success: fmt.Sprintf("Job having jobID: %d deleted successfully", jobID)}.Send(w)
 	}
 }
 

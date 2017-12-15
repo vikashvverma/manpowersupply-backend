@@ -24,10 +24,14 @@ func upsert(e repository.Execer, j *Job) (int64, error) {
 
 func delete(e repository.Execer, jobID int64) error {
 	query := fmt.Sprintf("DELETE FROM %s.%s WHERE job_id = $1", schema, jobTable)
-	_, err := e.Exec(query, jobID)
+	rowsAffected, err := e.Exec(query, jobID)
 	if err != nil {
 		return fmt.Errorf("delete: could not delete job having id: %d, err: ", jobID, err)
 	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("delete: no job found with jobID: %d", jobID)
+	}
+
 	return nil
 }
 func findAll(e repository.Execer, id string, page, limit int64) ([]Job, error) {
