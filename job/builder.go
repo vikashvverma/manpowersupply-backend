@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/vikashvverma/manpowersupply-backend/repository"
+	"strings"
 )
 
 const (
@@ -27,7 +28,7 @@ func delete(e repository.Execer, jobID int64) error {
 	query := fmt.Sprintf("DELETE FROM %s.%s WHERE job_id = $1", schema, jobTable)
 	rowsAffected, err := e.Exec(query, jobID)
 	if err != nil {
-		return fmt.Errorf("delete: could not delete job having id: %d, err: ", jobID, err)
+		return fmt.Errorf("delete: could not delete job having id: %d, err: %s", jobID, err)
 	}
 	if rowsAffected == 0 {
 		return fmt.Errorf("delete: no job found with jobID: %d", jobID)
@@ -39,7 +40,7 @@ func findAll(e repository.Execer, id string, page, limit int64, jobType string) 
 	query := fmt.Sprintf(`SELECT a.job_id, a.type_id, a.title, a.industry, a.location,
 				a.date_created, a.date_updated, a.available FROM %s.%s a WHERE
 				a.job_id::TEXT LIKE '%s' AND LOWER(a.industry) LIKE '%s' ORDER BY id DESC OFFSET %d LIMIT %d`,
-		schema, jobTable, id+"%", jobType+"%", page*limit, limit)
+		schema, jobTable, id+"%", strings.ToLower(jobType)+"%", page*limit, limit)
 	res, err := e.Query(query, jobScanner)
 	if err != nil {
 		return nil, fmt.Errorf("findAll: error querying database: %s", err)
