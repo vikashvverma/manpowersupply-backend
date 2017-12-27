@@ -20,12 +20,12 @@ func saveQuery(e repository.Execer, q *Query) (int64, error) {
 }
 
 func saveParty(e repository.Execer, p *Party) (int64, error) {
-	query := fmt.Sprintf("INSERT INTO %s.%s(name, address, phone, mobile, email) VALUES($1, $2, $3, $4, $5) RETURNING id", schema, partyTable)
-	return e.QueryRow(query, p.Name, p.Address, p.Phone, p.Mobile, p.Email)
+	query := fmt.Sprintf("INSERT INTO %s.%s(name, address, city, state, pin, country, phone, mobile, email) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id", schema, partyTable)
+	return e.QueryRow(query, p.Name, p.Address, p.City, p.State, p.PIN, p.Country, p.Phone, p.Mobile, p.Email)
 }
 
 func findAll(e repository.Execer, id string, page int64) ([]Party, error) {
-	query := fmt.Sprintf(`SELECT a.id, a.name, a.address, a.phone, a.mobile, a.email,
+	query := fmt.Sprintf(`SELECT a.id, a.name, a.address, a.city, a.state, a.pin, a.country, a.phone, a.mobile, a.email,
 				b.queryer_id, b.query, b.query_date FROM %s.%s a INNER JOIN %s.%s b
 				ON a.id = b.queryer_id WHERE a.id::TEXT LIKE '%s' ORDER BY id DESC
 				OFFSET %d LIMIT %d`,
@@ -49,6 +49,10 @@ func partyScanner(rows *sql.Rows) (interface{}, error) {
 			&result.ID,
 			&result.Name,
 			&result.Address,
+			&result.City,
+			&result.State,
+			&result.PIN,
+			&result.Country,
 			&result.Phone,
 			&result.Mobile,
 			&result.Email,
