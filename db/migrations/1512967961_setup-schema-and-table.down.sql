@@ -8,6 +8,8 @@ DROP TABLE manpower.job;
 
 DROP TABLE manpower.job_type;
 
+DROP TABLE manpower.industry;
+
 DROP TABLE manpower.query;
 
 DROP TABLE manpower.party;

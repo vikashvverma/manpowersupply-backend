@@ -22,10 +22,17 @@ CREATE TABLE manpower.query (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE manpower.job_type (
+CREATE TABLE manpower.industry (
   id       SERIAL,
-  type_id  INT         NOT NULL UNIQUE,
   industry VARCHAR(10) NOT NULL UNIQUE,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE manpower.job_type (
+  id      SERIAL,
+  type_id INT         NOT NULL UNIQUE,
+  title   VARCHAR(10) NOT NULL,
+  UNIQUE (type_id, title),
   PRIMARY KEY (id)
 );
 
@@ -47,8 +54,8 @@ ALTER TABLE manpower.query
   ADD CONSTRAINT query_fk0 FOREIGN KEY (queryer_id) REFERENCES manpower.party (id);
 
 ALTER TABLE manpower.job
-  ADD CONSTRAINT job_fk0 FOREIGN KEY (industry) REFERENCES manpower.job_type (industry);
+  ADD CONSTRAINT job_fk0 FOREIGN KEY (industry) REFERENCES manpower.industry (industry);
 
 ALTER TABLE manpower.job
-  ADD CONSTRAINT job_fk1 FOREIGN KEY (type_id) REFERENCES manpower.job_type (type_id);
+  ADD CONSTRAINT job_fk1 FOREIGN KEY (type_id) REFERENCES manpower.industry (id);
 
