@@ -13,9 +13,9 @@ type Job struct {
 }
 
 type Type struct {
-	ID       int64  `json:"id, omitempty"`
-	TypeID   int64  `json:"type_id"`
-	Title    string `json:"title"`
+	ID     int64  `json:"id, omitempty"`
+	TypeID int64  `json:"type_id"`
+	Title  string `json:"title"`
 }
 
 type Industry struct {
