@@ -10,9 +10,10 @@ import (
 )
 
 const (
-	schema   = "manpower"
-	jobTable = "job"
-	jobType  = "job_type"
+	schema        = "manpower"
+	jobTable      = "job"
+	industryTable = "industry"
+	jobType       = "job_type"
 )
 
 func upsert(e repository.Execer, j *Job) (int64, error) {
@@ -49,26 +50,56 @@ func findAll(e repository.Execer, id string, page, limit int64, jobType string) 
 	return jobs, nil
 }
 
-func jobTypes(e repository.Execer) ([]Type, error) {
-	query := fmt.Sprintf("SELECT type_id, industry FROM %s.%s", schema, jobType)
-
-	types, err := e.Query(query, typeScanner)
+func jobTypes(e repository.Execer, typeID string) ([]Type, error) {
+	query := fmt.Sprintf("SELECT type_id, title FROM %s.%s WHERE type_id::TEXT  LIKE '%s'", schema, jobType, string(typeID)+"%")
+	fmt.Println()
+	fmt.Println(typeID)
+	fmt.Println(query)
+	fmt.Println()
+	types, err := e.Query(query, jobTypeScanner)
 	if err != nil {
 		return nil, fmt.Errorf("jobTypes: could not query job types: %s", err)
 	}
 	return types.([]Type), nil
+	return nil, nil
 }
 
-func typeScanner(rows *sql.Rows) (interface{}, error) {
+func industry(e repository.Execer) ([]Industry, error) {
+	query := fmt.Sprintf("SELECT type_id, industry FROM %s.%s", schema, industryTable)
+
+	types, err := e.Query(query, industryScanner)
+	if err != nil {
+		return nil, fmt.Errorf("industry: could not query job types: %s", err)
+	}
+	return types.([]Industry), nil
+}
+
+func industryScanner(rows *sql.Rows) (interface{}, error) {
+	var results []Industry
+	defer rows.Close()
+
+	for rows.Next() {
+		var result Industry
+
+		err := rows.Scan(&result.TypeID, &result.Industry)
+		if err != nil {
+			return nil, fmt.Errorf("industryScanner: error scanning row: %s", err)
+		}
+		results = append(results, result)
+	}
+	return results, nil
+}
+
+func jobTypeScanner(rows *sql.Rows) (interface{}, error) {
 	var results []Type
 	defer rows.Close()
 
 	for rows.Next() {
 		var result Type
 
-		err := rows.Scan(&result.TypeID, &result.Industry)
+		err := rows.Scan(&result.TypeID, &result.Title)
 		if err != nil {
-			return nil, fmt.Errorf("typeScanner: error scanning row: %s", err)
+			return nil, fmt.Errorf("industryScanner: error scanning row: %s", err)
 		}
 		results = append(results, result)
 	}
