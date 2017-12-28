@@ -52,10 +52,6 @@ func findAll(e repository.Execer, id string, page, limit int64, jobType string) 
 
 func jobTypes(e repository.Execer, typeID string) ([]Type, error) {
 	query := fmt.Sprintf("SELECT type_id, title FROM %s.%s WHERE type_id::TEXT  LIKE '%s'", schema, jobType, string(typeID)+"%")
-	fmt.Println()
-	fmt.Println(typeID)
-	fmt.Println(query)
-	fmt.Println()
 	types, err := e.Query(query, jobTypeScanner)
 	if err != nil {
 		return nil, fmt.Errorf("jobTypes: could not query job types: %s", err)
