@@ -1,3 +1,4 @@
+-- +goose Up
 CREATE SCHEMA manpower;
 
 CREATE TABLE manpower.party (
@@ -25,14 +26,14 @@ CREATE TABLE manpower.query (
 CREATE TABLE manpower.industry (
   id       SERIAL,
   type_id INT  NOT NULL UNIQUE ,
-  industry VARCHAR(10) NOT NULL UNIQUE,
+  industry VARCHAR(20) NOT NULL UNIQUE,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE manpower.job_type (
   id      SERIAL,
-  type_id INT         NOT NULL UNIQUE,
-  title   VARCHAR(10) NOT NULL,
+  type_id INT         NOT NULL,
+  title   VARCHAR(50) NOT NULL,
   UNIQUE (type_id, title),
   PRIMARY KEY (id)
 );
@@ -60,3 +61,23 @@ ALTER TABLE manpower.job
 ALTER TABLE manpower.job
   ADD CONSTRAINT job_fk1 FOREIGN KEY (type_id) REFERENCES manpower.industry (type_id);
 
+
+
+-- +goose Down
+ALTER TABLE manpower.job DROP CONSTRAINT job_fk1;
+
+ALTER TABLE manpower.job DROP CONSTRAINT job_fk0;
+
+ALTER TABLE manpower.query DROP CONSTRAINT query_fk0;
+
+DROP TABLE manpower.job;
+
+DROP TABLE manpower.job_type;
+
+DROP TABLE manpower.industry;
+
+DROP TABLE manpower.query;
+
+DROP TABLE manpower.party;
+
+DROP SCHEMA manpower;
