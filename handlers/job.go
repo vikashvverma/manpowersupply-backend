@@ -108,15 +108,39 @@ func DeleteJob(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	}
 }
 
-func Types(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
+func JobType(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		jobTypes, err := f.Types()
+		vars := mux.Vars(r)
+		typeIDString, ok := vars["id"]
+		var err error
+		if ok {
+			_, err = strconv.Atoi(typeIDString)
+			if err != nil {
+				l.WithError(err).Errorf("JobType: invalid typeID supplied: %s", typeIDString)
+				response.ClientError(w)
+				return
+			}
+		}
+
+		jobTypes, err := f.JobType(typeIDString)
 		if err != nil {
-			l.WithError(err).Errorf("Types: could not retrieve job types")
+			l.WithError(err).Errorf("JobType: could not retrieve job types")
 			response.ServerError(w)
 			return
 		}
 		response.Success{Success: jobTypes}.Send(w)
+	}
+}
+
+func Industry(f job.Fetcher, l *logrus.Logger) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		industries, err := f.Industry()
+		if err != nil {
+			l.WithError(err).Errorf("Industry: could not retrieve industries")
+			response.ServerError(w)
+			return
+		}
+		response.Success{Success: industries}.Send(w)
 	}
 }
 
