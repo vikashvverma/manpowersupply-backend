@@ -5,6 +5,8 @@ CREATE TABLE manpower.party (
   id      SERIAL PRIMARY KEY,
   name    VARCHAR(50)  NOT NULL,
   address VARCHAR(100) NOT NULL,
+  company VARCHAR(100),
+  website VARCHAR(100),
   city    VARCHAR(50),
   state   VARCHAR(50),
   pin     VARCHAR(15),
@@ -17,15 +19,17 @@ CREATE TABLE manpower.party (
 
 CREATE TABLE manpower.query (
   id         SERIAL,
-  queryer_id INT          NOT NULL,
-  query      VARCHAR(400) NOT NULL,
-  query_date TIMESTAMPTZ  NOT NULL DEFAULT now(),
+  queryer_id INT         NOT NULL,
+  query      VARCHAR(400),
+  industry   VARCHAR(20),
+  title      VARCHAR(50),
+  query_date TIMESTAMPTZ NOT NULL DEFAULT now(),
   PRIMARY KEY (id)
 );
 
 CREATE TABLE manpower.industry (
   id       SERIAL,
-  type_id INT  NOT NULL UNIQUE ,
+  type_id  INT         NOT NULL UNIQUE,
   industry VARCHAR(20) NOT NULL UNIQUE,
   PRIMARY KEY (id)
 );
@@ -61,14 +65,15 @@ ALTER TABLE manpower.job
 ALTER TABLE manpower.job
   ADD CONSTRAINT job_fk1 FOREIGN KEY (type_id) REFERENCES manpower.industry (type_id);
 
-
-
 -- +goose Down
-ALTER TABLE manpower.job DROP CONSTRAINT job_fk1;
+ALTER TABLE manpower.job
+  DROP CONSTRAINT job_fk1;
 
-ALTER TABLE manpower.job DROP CONSTRAINT job_fk0;
+ALTER TABLE manpower.job
+  DROP CONSTRAINT job_fk0;
 
-ALTER TABLE manpower.query DROP CONSTRAINT query_fk0;
+ALTER TABLE manpower.query
+  DROP CONSTRAINT query_fk0;
 
 DROP TABLE manpower.job;
 
