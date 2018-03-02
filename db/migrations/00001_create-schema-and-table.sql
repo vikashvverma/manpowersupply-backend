@@ -45,9 +45,9 @@ CREATE TABLE manpower.job_type (
 CREATE TABLE manpower.job (
   id           SERIAL,
   job_id       INT         NOT NULL UNIQUE,
-  title        VARCHAR(10) NOT NULL,
-  industry     VARCHAR(10) NOT NULL,
-  location     VARCHAR(10) NOT NULL,
+  title        VARCHAR(20) NOT NULL,
+  industry     VARCHAR(20) NOT NULL,
+  location     VARCHAR(20) NOT NULL,
   date_created TIMESTAMPTZ NOT NULL DEFAULT now(),
   date_updated TIMESTAMPTZ NOT NULL DEFAULT now(),
   available    BOOLEAN     NOT NULL,
