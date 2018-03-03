@@ -26,7 +26,7 @@ func saveParty(e repository.Execer, p *Party) (int64, error) {
 
 func findAll(e repository.Execer, id string, page int64) ([]Party, error) {
 	query := fmt.Sprintf(`SELECT a.id, a.name, a.company, a.website, a.address, a.city, a.state, a.pin, a.country, a.phone, a.mobile, a.email,
-				b.queryer_id, b.query, b.query_date FROM %s.%s a INNER JOIN %s.%s b
+				b.queryer_id, b.query, b.industry, b.title, b.query_date FROM %s.%s a INNER JOIN %s.%s b
 				ON a.id = b.queryer_id WHERE a.id::TEXT LIKE '%s' ORDER BY id DESC
 				OFFSET %d LIMIT %d`,
 		schema, partyTable, schema, query, id+"%", page*partyPerPage, partyPerPage)
@@ -60,6 +60,8 @@ func partyScanner(rows *sql.Rows) (interface{}, error) {
 			&result.Email,
 			&result.Query.QueryerID,
 			&result.Query.Query,
+			&result.Query.Industry,
+			&result.Query.Title,
 			&result.Query.QueryDate,
 		)
 		if err != nil {
