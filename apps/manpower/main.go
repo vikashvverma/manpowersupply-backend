@@ -94,7 +94,9 @@ func configFromFlag() (*config.Config, []error) {
 	flag.StringVar(&args.DBPassword, "dbPassword", "", "Database Password")
 	flag.StringVar(&args.DBTimeout, "dbTimeout", "30000", "Database Query Timeout in milliseconds")
 	flag.StringVar(&args.SeedDataPath, "seedDataPath", "", "Seed data path, optional if data is already populated")
-	flag.StringVar(&args.OriginAllowed, "originAllowed", "", "allowd origin to avoid CORS error, not required if both frontend & backend are on same domain")
+	flag.StringVar(&args.OriginAllowed, "originAllowed", "", "allowed origin to avoid CORS error, not required if both frontend & backend are on same domain")
+	flag.StringVar(&args.Username, "username", "", "username for login")
+	flag.StringVar(&args.Password, "password", "", "password for login")
 	flag.Parse()
 
 	if *h {
