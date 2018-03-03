@@ -13,6 +13,8 @@ type Config struct {
 	dbConnectionString string
 	seedDataPath       string
 	originAllowed      string
+	username           string
+	password           string
 }
 
 type Args struct {
@@ -25,6 +27,9 @@ type Args struct {
 	DBTimeout     string `json:"dbTimeout"`
 	SeedDataPath  string `json:"seedDataPath"`
 	OriginAllowed string `json:"originAllowed"`
+
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 func New(args *Args) (*Config, []error) {
@@ -58,6 +63,8 @@ func New(args *Args) (*Config, []error) {
 	}
 
 	c.originAllowed = args.OriginAllowed
+	c.username = args.Username
+	c.password = args.Password
 	return c, nil
 }
 
@@ -108,6 +115,14 @@ func (c *Config) ConnectionString() string {
 
 func (c *Config) Port() int {
 	return c.port
+}
+
+func (c *Config) Username() string {
+	return c.username
+}
+
+func (c *Config) Password() string {
+	return c.password
 }
 
 func (c *Config) SeedDataPath() string {

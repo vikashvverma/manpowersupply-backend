@@ -34,5 +34,7 @@ func Router(c *config.Config, f *factory.Factory) *mux.Router {
 	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.PartyFetcher(), f.Logger())).Methods(GET)
 	router.HandleFunc("/api/manpower/party", handlers.FindParty(f.PartyFetcher(), f.Logger())).Queries("page", "{page}").Methods(GET)
 	router.HandleFunc("/api/manpower/party/{id}", handlers.FindParty(f.PartyFetcher(), f.Logger())).Methods(GET)
+
+	router.HandleFunc("/api/login", handlers.Login(c, f.Logger())).Methods(POST)
 	return router
 }
