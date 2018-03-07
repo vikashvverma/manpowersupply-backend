@@ -15,18 +15,20 @@ type Config struct {
 	originAllowed      string
 	username           string
 	password           string
+	prerenderToken     string
 }
 
 type Args struct {
-	Port          string `json:"port"`
-	DBName        string `json:"dbName"`
-	DBServer      string `json:"dbServer"`
-	DBPort        string `json:"dbPort"`
-	DBUserName    string `json:"dbUserName"`
-	DBPassword    string `json:"dbPassword"`
-	DBTimeout     string `json:"dbTimeout"`
-	SeedDataPath  string `json:"seedDataPath"`
-	OriginAllowed string `json:"originAllowed"`
+	Port           string `json:"port"`
+	DBName         string `json:"dbName"`
+	DBServer       string `json:"dbServer"`
+	DBPort         string `json:"dbPort"`
+	DBUserName     string `json:"dbUserName"`
+	DBPassword     string `json:"dbPassword"`
+	DBTimeout      string `json:"dbTimeout"`
+	SeedDataPath   string `json:"seedDataPath"`
+	OriginAllowed  string `json:"originAllowed"`
+	PrerenderToken string `json:"prerenderToken"`
 
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -65,6 +67,7 @@ func New(args *Args) (*Config, []error) {
 	c.originAllowed = args.OriginAllowed
 	c.username = args.Username
 	c.password = args.Password
+	c.prerenderToken = args.PrerenderToken
 	return c, nil
 }
 
@@ -123,6 +126,10 @@ func (c *Config) Username() string {
 
 func (c *Config) Password() string {
 	return c.password
+}
+
+func (c *Config) Token() string {
+	return c.prerenderToken
 }
 
 func (c *Config) SeedDataPath() string {

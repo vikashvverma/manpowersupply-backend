@@ -15,6 +15,7 @@ import (
 	"github.com/vikashvverma/manpowersupply-backend/factory"
 	"github.com/vikashvverma/manpowersupply-backend/log"
 	"github.com/vikashvverma/manpowersupply-backend/router"
+	"github.com/vikashvverma/goprerender"
 )
 
 const (
@@ -57,6 +58,7 @@ func main() {
 	handlers.CORS(headersOk, originsOk, methodsOk)
 
 	n := negroni.New()
+	n.Use(prerender.NewOptions(c.Token()).NewPrerender())
 	n.Use(log.New())
 	n.UseHandler(handlers.CORS(headersOk, originsOk, methodsOk)(muxRouter))
 	n.Run(fmt.Sprintf(":%d", c.Port()))
@@ -97,6 +99,7 @@ func configFromFlag() (*config.Config, []error) {
 	flag.StringVar(&args.OriginAllowed, "originAllowed", "", "allowed origin to avoid CORS error, not required if both frontend & backend are on same domain")
 	flag.StringVar(&args.Username, "username", "", "username for login")
 	flag.StringVar(&args.Password, "password", "", "password for login")
+	flag.StringVar(&args.Password, "prerenderToken", "", "prerender token")
 	flag.Parse()
 
 	if *h {
