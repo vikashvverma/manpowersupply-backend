@@ -1,12 +1,10 @@
 {
   "port": "3333",
   "dbPort": "5432",
-  "dbName": "umalanhu",
-  "dbServer": "tantor.db.elephantsql.com",
-  "dbUserName": "umalanhu",
-  "dbPassword": "NIJdjzzpXG_B_7dtKglK1dGtmJ4y9qy7",
+  "dbName": "civimech",
+  "dbServer": "localhost",
+  "dbUserName": "postgres",
+  "dbPassword": "C0mplexPwd",
   "seedDataPath": "./seed/seed.json",
-  "originAllowed": "*",
-  "username": "admin",
-  "password": "manpower"
+  "originAllowed": "*"
 }
