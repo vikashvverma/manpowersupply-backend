@@ -9,7 +9,6 @@ import (
 
 	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/negroni"
-	"github.com/gorilla/handlers"
 
 	"github.com/vikashvverma/manpowersupply-backend/config"
 	"github.com/vikashvverma/manpowersupply-backend/factory"
