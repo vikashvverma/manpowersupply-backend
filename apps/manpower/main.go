@@ -51,14 +51,16 @@ func main() {
 	//}
 
 	muxRouter := router.Router(c, f)
-	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
-	originsOk := handlers.AllowedOrigins([]string{c.OriginAllowed()})
-	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "OPTIONS", "DELETE"})
-	handlers.CORS(headersOk, originsOk, methodsOk)
+	//headersOk := handlers.AllowedHeaders([]string{"X-Requested-With"})
+	//originsOk := handlers.AllowedOrigins([]string{c.OriginAllowed()})
+	//methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "OPTIONS", "DELETE"})
+	//handlers.CORS(headersOk, originsOk, methodsOk)
 
 	n := negroni.New()
 	n.Use(log.New())
-	n.UseHandler(handlers.CORS(headersOk, originsOk, methodsOk)(muxRouter))
+	//n.UseHandler(handlers.CORS(headersOk, originsOk, methodsOk)(muxRouter))
+	n.UseHandler(muxRouter)
+
 	n.Run(fmt.Sprintf(":%d", c.Port()))
 }
 
